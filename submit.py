@@ -58,9 +58,18 @@ for data in beijing_datas:
         if len(sta) > 10:
             sta = sta[0:10]
         test_ids.append(sta + '_aq#' + str(i))
-        pm25s.append(int(float(data['PM2.5'][i])))
-        pm10s.append(int(float(data['PM10'][i])))
-        o3s.append(int(float(data['O3'][i])))
+        if float(data['PM2.5'][i]) != float(data['PM2.5'][i]):
+            pm25s.append(0)
+        else:
+            pm25s.append(int(float(data['PM2.5'][i])))
+        if float(data['PM10'][i]) != float(data['PM10'][i]):
+            pm10s.append(0)
+        else:
+            pm10s.append(int(float(data['PM10'][i])))
+        if float(data['O3'][i]) != float(data['O3'][i]):
+            o3s.append(0)
+        else:
+            o3s.append(int(float(data['O3'][i])))
 
 london_datas = json.loads(ldjson_text)
 if len(london_datas) < 13:
@@ -72,9 +81,18 @@ for data in london_datas:
         continue
     for i in range(48):
         test_ids.append(data['station_id'] + '#' + str(i))
-        pm25s.append(int(float(data['PM2.5'][i])))
-        pm10s.append(int(float(data['PM10'][i])))
-        o3s.append(int(float(data['O3'][i])))
+        if float(data['PM2.5'][i]) != float(data['PM2.5'][i]):
+            pm25s.append(0)
+        else:
+            pm25s.append(int(float(data['PM2.5'][i])))
+        if float(data['PM10'][i]) != float(data['PM10'][i]):
+            pm10s.append(0)
+        else:
+            pm10s.append(int(float(data['PM10'][i])))
+        if float(data['O3'][i]) != float(data['O3'][i]):
+            o3s.append(0)
+        else:
+            o3s.append(int(float(data['O3'][i])))
 
 column_testid = pd.Series(test_ids, name='test_id')
 column_pm25 = pd.Series(pm25s, name='PM2.5')
@@ -87,8 +105,6 @@ timestamp = str(int(time.time()))
 con.to_csv(timestamp + 'result.csv', index = False)
 
 files={'files': open(timestamp + 'result.csv','rb')}
-
-
 
 
 data = {

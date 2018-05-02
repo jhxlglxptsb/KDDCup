@@ -2,6 +2,7 @@ from __future__ import print_function
 import json
 import time
 import datetime
+import sys
 
 import numpy as np
 
@@ -96,10 +97,12 @@ beijing_station = ["dongsi", "tiantan", "guanyuan", "wanshouxigong", "aotizhongx
                     "miyunshuiku", "donggaocun", "yongledian", "yufa", "liulihe", \
                     "qianmen", "yongdingmennei", "xizhimenbei", "nansanhuan", "dongsihuan"]
 london_station = ['CD1', 'BL0', 'GR4', 'MY7', 'HV1', 'GN3', 'GR9', 'LW2', 'GN0', 'KF1', 'CD9', 'ST5', 'TH4']
-
-aq_all = json.load(open('beijing_aq_test.json'))
+if len(sys.argv) < 3:
+    print('Usage: python process_test.py beijing json file name] [london json file name]')
+    exit(0)
+aq_all = json.load(open(sys.argv[1]))
 print('> get %d entries' % len(aq_all))
-aq_london = json.load(open('london_aq_test.json'))
+aq_london = json.load(open(sys.argv[2]))
 print('> get %d entries' % len(aq_london))
 
 

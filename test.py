@@ -106,7 +106,7 @@ def test(station, valid_dataset, max_values, end_time, start):
     acc.append(smape(O3, O3_actual))
     print(acc)
 
-def predict(station, test_data, max_values, end_time, type):
+def predict(station, test_data, max_values, type):
     if type == 0:
         feature_dim = 6
     else:
@@ -115,15 +115,6 @@ def predict(station, test_data, max_values, end_time, type):
     model.load_state_dict(torch.load('./files/params_'+station+'.pkl'))
     x = test_data
     #x, t = x.unsqueeze(0), t.unsqueeze(0)
-    for i in range(end_time, 24):
-        x = Variable(x, volatile=True)
-        x = x.unsqueeze(0)
-        output = model(x)
-        output = output.squeeze(0)
-        output = output.data
-        x = x.squeeze(0)
-        x = np.vstack((x[1:], output[-1]))
-        x = torch.from_numpy(x)
     PM25 = []
     PM10 = []
     O3 = []
@@ -161,7 +152,7 @@ def predict(station, test_data, max_values, end_time, type):
         london_output.append(output_dict)
 
 
-def make_test_data(name, length=24):
+def make_predict_data(name, length=24):
     print('> reading %s ...' % name)
     aq_matrix = np.load(open(name, 'rb'))
     total_count, dim = aq_matrix.shape
@@ -179,12 +170,11 @@ def make_test_data(name, length=24):
 if __name__ == '__main__':
 
     for station in beijing_station:
-        test_data, max_values = make_test_data('./files/test/bj_aq_test_'+station+'.npy', use_length)
-        print (test_data.shape)
-        predict(station, test_data, max_values, 24, 0)
+        test_data, max_values = make_predict_data('./files/test/bj_aq_test_'+station+'.npy', use_length)
+        predict(station, test_data, max_values, 0)
     for station in london_station:
-        test_data, max_values = make_test_data('./files/test/ld_aq_test_'+station+'.npy', use_length)
-        predict(station, test_data, max_values, 24, 1)
+        test_data, max_values = make_predict_data('./files/test/ld_aq_test_'+station+'.npy', use_length)
+        predict(station, test_data, max_values, 1)
     out_file = open('beijing_output.json', 'w')
     out_file.write(json.dumps(beijing_output))
     out_file.close()
@@ -194,11 +184,11 @@ if __name__ == '__main__':
     '''
     station = 'LW2'
     filename = './files/test/ld_aq_test_'+station+'.npy'
-    test_data, max_values = make_test_data(filename, use_length)
+    test_data, max_values = make_predict_data(filename, use_length)
     predict(station, test_data, max_values, 24, 1)
     station = 'dongsi'
     filename = './files/test/bj_aq_test_'+station+'.npy'
-    test_data, max_values = make_test_data(filename, use_length)
+    test_data, max_values = make_predict_data(filename, use_length)
     print (np.multiply(test_data, max_values))
     predict(station, test_data, max_values, 24, 0)
 

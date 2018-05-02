@@ -19,3 +19,16 @@ python submit.py beijing_output.json london_output.json
 - process_test.py处理的数据存在./files/test文件夹下
 - test.py生成文件beijing_output.json和london_output.json
 - submit.py 生成result文件进行提交
+
+### 测试模型
+运行示例在test.py的main函数注释部分
+```
+for station in beijing_station:
+        test_dataset, max_values = make_test_data('./files/test/bj_aq_test_'+station+'.npy', use_length)
+        test(station, test_dataset, max_values, 0)
+
+for station in london_station:
+        test_dataset, max_values = make_test_data('./files/test/ld_aq_test_'+station+'.npy', use_length)
+        test(station, test_dataset, max_values, 1)
+```
+需要注意这里test_dataset的长度要大于48
